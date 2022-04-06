@@ -23,3 +23,16 @@ resource "azurerm_mysql_flexible_database" "db" {
   charset             = "utf8"
   collation           = "utf8_unicode_ci"
 }
+
+locals {
+  srv_login = azurerm_mysql_flexible_server.server.administrator_login
+  srv_pass  = azurerm_mysql_flexible_server.server.administrator_password
+  srv_fqdn  = azurerm_mysql_flexible_server.server.fqdn
+  db_name   = azurerm_mysql_flexible_database.db.name
+}
+
+resource "azurerm_key_vault_secret" "db_url" {
+  name         = "mysql-db-url"
+  value        = "mysql://${local.srv_login}:${local.srv_pass}@${local.srv_fqdn}/${local.db_name}"
+  key_vault_id = var.key_vault_id
+}
