@@ -41,3 +41,11 @@ module "app_service" {
     "HASH_SALT"    = random_uuid.umami_salt.result
   }
 }
+
+module "mysql_fw" {
+  source = "./mysql_fw"
+
+  rg_name      = azurerm_resource_group.rg.name
+  server_name  = module.mysql.server_name
+  ip_address_list = module.app_service.app_outbound_ip_address_list
+}

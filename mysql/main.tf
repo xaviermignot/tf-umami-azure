@@ -33,6 +33,6 @@ locals {
 
 resource "azurerm_key_vault_secret" "db_url" {
   name         = "mysql-db-url"
-  value        = "mysql://${local.srv_login}:${local.srv_pass}@${local.srv_fqdn}/${local.db_name}"
+  value        = "mysql://${local.srv_login}:${urlencode(local.srv_pass)}@${local.srv_fqdn}/${local.db_name}?sslcert=DigiCertGlobalRootCA.crt.pem"
   key_vault_id = var.key_vault_id
 }
